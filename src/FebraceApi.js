@@ -6,10 +6,10 @@ const URL = 'http://127.0.0.1:8000/'
 
 
 async function getTableColumns(tablename) {
-    const r = await axios.get('http://127.0.0.1:8000/'+tablename+'/cols');
-    console.log(r);
+    const r = await axios.get(URL+tablename+'/cols');
+    console.log(await r.data);
 
-    return r.data;
+    return await r.data;
 }
 
 async function tableRequest(tableName, fields, filters, limit) {

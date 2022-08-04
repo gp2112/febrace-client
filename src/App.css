@@ -36,3 +36,31 @@
     transform: rotate(360deg);
   }
 }
+
+.loading-gif {
+    position: absolute;
+    margin-left: 45%;
+    margin-top: 4em;
+}
+
+header {
+    width: 98%;
+    margin-left: 1%;
+    margin-top: 1em;
+}
+
+main {
+    margin-left: 5%;
+    margin-top: 2em;
+    width: 90%;
+}
+
+.navbar {
+    border-radius: 5px;
+}
+
+.nav-content {
+    position: relative;
+    width: 90%;
+    margin-left: 5%;
+}

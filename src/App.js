@@ -1,4 +1,4 @@
-//import './App.css';
+import './App.css';
 
 
 import React, {Component} from 'react';
@@ -8,6 +8,8 @@ import 'materialize-css/dist/css/materialize.min.css';
 import M from "materialize-css";
 
 import {tableRequest, getTableColumns} from "./FebraceApi"
+import QueryForm from "./query/form.js"
+
 
 const tables = {
     Docentes: 'docentes_parquet',
@@ -20,17 +22,19 @@ const tables = {
 class NavBar extends Component {
     render() {
         return (
-             <nav className="cyan darken-1">
-                <div className="nav-wrapper">
-                  <a href="/" className="brand-logo">
-                        <i className="material-icons">settings_ethernet</i>
-                        Febrace Analytics
-                  </a>
-                  <ul id="nav-mobile" className="right hide-on-med-and-down">
-                    <li><a href="/search">Extração de Dados</a></li>
-                    <li><a href="/doc">Doc</a></li>
-                    <li><a href="/sobre">Sobre</a></li>
-                  </ul>
+             <nav className="navbar cyan darken-1">
+                <div className="nav-content">
+                    <div className="nav-wrapper">
+                      <a href="/" className="brand-logo">
+                            <i className="material-icons mr-4">settings_ethernet</i>
+                            Febrace Analytics
+                      </a>
+                      <ul id="nav-mobile" className="right hide-on-med-and-down">
+                        <li><a href="/search">Extração de Dados</a></li>
+                        <li><a href="/doc">Doc</a></li>
+                        <li><a href="/sobre">Sobre</a></li>
+                      </ul>
+                    </div>
                 </div>
               </nav>
         )
@@ -49,45 +53,6 @@ class ExtractForm extends Component {
 }
 
 
-class TableColumns extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            tableName: null,
-            columns: []
-        };
-        this.loadColumns();
-    }
-    
-    async loadColumns() {
-        const columns = await getTableColumns('matriculas');
-        this.setState({tableName: 'matriculas', columns: columns});
-    }
-
-    render() {
-        let heads = [];
-        for (let col of this.state.columns)
-            heads.push(<tr><td>{col.Name}</td><td></td><td>{col.Type}</td></tr>);
-
-        return (
-            <table className="highlight">
-                <thead>
-                    <tr>
-                        <th>Column</th>
-                        <th>Descrição</th>
-                        <th>Tipo</th>
-                    </tr>
-
-                </thead>
-                <tbody>
-                    {heads}
-                </tbody>
-            
-
-            </table>);
-    }
-}
 
 async function sendBtnHandle(e) {
     
@@ -114,9 +79,13 @@ class App extends Component {
     render() {
         return (
             <>
-                <NavBar />
-                <TableColumns />
-                <button className="btn" onClick={sendBtnHandle} >Test</button> 
+                <header>
+                    <NavBar />
+                </header>
+                <main>
+                    <QueryForm />
+                    <button className="btn" onClick={sendBtnHandle} >Test</button>
+                </main>
             </>
         );
     }
