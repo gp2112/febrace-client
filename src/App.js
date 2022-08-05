@@ -84,7 +84,6 @@ class App extends Component {
                 </header>
                 <main>
                     <QueryForm />
-                    <button className="btn" onClick={sendBtnHandle} >Test</button>
                 </main>
             </>
         );
