@@ -38,12 +38,12 @@ class Select extends Component {
     
     selectColumn = (col) => {
         this.setState({selectedColumn: col});
-        this.changeQuery(this.index, col, this.state.value);
+        this.changeQuery(this.index, col, this.state.value, this.state.operation);
     }
 
     setValue = (value) => {
         this.setState({value: value});
-        this.changeQuery(this.index, this.state.selectedColumn, value);
+        this.changeQuery(this.index, this.state.selectedColumn, value, this.state.operation);
     }
 
     removeq = () => {
@@ -53,6 +53,7 @@ class Select extends Component {
 
     selectOp = (val) => {
         this.setState({operation: val});
+        this.changeQuery(this.index, this.state.selectedColumn, this.state.value, val);
     }
 
     render() {
@@ -65,13 +66,13 @@ class Select extends Component {
             <div className="input-field col s12">
                 <div className="input-field col s3">
                 
-                    <select className="browser-default" value={this.state.selectedColumn} onChange={e => this.selectColumn(e.target.value)}>
+                    <select className="" value={this.state.selectedColumn} onChange={e => this.selectColumn(e.target.value)}>
                         <option value="" disabled >Select a column.</option>
                         {options}
                     </select>
                 </div>
                 <div className="input-field col s3">
-                    <select className="browser-default" value={this.state.operation} onChange={e => this.selectOp(e.target.value)}>
+                    <select className="" value={this.state.operation} onChange={e => this.selectOp(e.target.value)}>
                             <option value="equals">equals</option>
                             <option value="bigger">bigger than</option>
                             <option value="lower">lower than</option>
@@ -104,7 +105,7 @@ class Filter extends Component {
         this.state = {
             columns: props.columns,
             query: [],
-            type: props.type, // and/or
+            type: props.type ? props.type : 'and', // and/or
             loading: true
         };
         this.removedCount = 0;
@@ -184,8 +185,13 @@ class Filter extends Component {
         let select = <Select index={query.length} changeQuery={this.changeQuery} 
                     removeQuery={this.removeQuery} columns={this.state.columns} defaultValue="" />;
 
-        query.push({type:'leaf', column: '', value: '', select: select});
+        query.push({type:'leaf', column: '', operation: 'equals', value: '', select: select});
         this.setState({query: query});
+    }
+
+    changeType = (e) => {
+        this.updateFilter(e.target.value, this.query);
+        this.setState({type: e.target.value});
     }
 
     render() {
@@ -213,6 +219,13 @@ class Filter extends Component {
 
         return (
             <>
+                <div className="operation-select">
+                    <label>Selecione a Operação:</label>
+                    <select value={this.state.type} onChange={ this.changeType }>
+                        <option value="and">AND</option>
+                        <option value="or">OR</option>
+                    </select>
+                </div>
                 <div className="row">
                 { selects }
                 </div>
