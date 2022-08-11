@@ -83,6 +83,7 @@ class App extends Component {
                     <NavBar />
                 </header>
                 <main>
+                    <input type="text" id="tablename" />
                     <QueryForm />
                 </main>
             </>
