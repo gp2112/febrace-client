@@ -230,7 +230,7 @@ class Filter extends Component {
                 { selects }
                 </div>
                 <div className="right-align">
-                    <button className="btn green m2">Add SubQuery</button>
+                    <button className="btn m2">Add SubQuery</button>
                     <button className={!this.canAddColumn ? "btn grey lighten-1" : "btn"} 
                         onClick={e => this.addSelect(e)}>Add Column
                     </button>

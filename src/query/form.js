@@ -171,9 +171,20 @@ class QueryForm extends Component {
                         
                     </div> : <p></p>
                 }
-                <button className="btn orange" onClick={this.toggleView}>
-                    Ver Código
-                </button>
+                <div className="row">
+                    <div className="col s12">
+                        <div className="col s6 right-align">
+                            <button className="btn orange" onClick={this.toggleView}>
+                                Ver Código
+                            </button>
+                        </div>
+                        <div className="col s6 left-align">
+                            <button className="btn green">
+                                Buscar
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }

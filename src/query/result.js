@@ -1,49 +1,86 @@
+import React, {Component} from 'react';
 
 
-class TableColumns extends Component {
+import 'materialize-css/dist/css/materialize.min.css';
+import './query.css';
+import '../App.css';
+
+import M from "materialize-css";
+
+class Result extends Component {
+
+    componentDidMount() {
+        M.AutoInit();
+    }
+
 
     constructor(props) {
         super(props);
-        this.state = {
-            tableName: null,
-            columns: [],
-            loading: true
-        };
-        this.loadColumns();
-    }
-    
-    async loadColumns() {
-        console.log("Loading columns...");
-        this.setState({loading: true});
 
-        const columns = await getTableColumns('matriculas');
-        this.setState({tableName: 'matriculas', columns: columns, loading: false});
+        this.state = {
+            columns: props.columns,
+            rows: props.rows
+        };
+
+        this.limit = this.props.limit;
+
+    }
+
+    renderHeader() {
+        const header = [];
+        for (let col of this.state.columns) {
+            header.push(
+                <th key={col}>{col}</th>
+            );
+        }
+        return header;
+    }
+
+    renderRows() {
+        const rows = []; let i=0;
+
+        for (let row of this.state.rows) {
+            if (i >= this.limit) break;
+
+            let fields = [];
+            for (let col of this.state.columns)
+                fields.push(
+                    <td key={col}>row[col]</td>
+                );
+
+            rows.push(
+                <tr key={i++}>
+                    {fields}
+                </tr>
+            );
+        }
+        return rows;
     }
 
     render() {
-        let heads = [];
-        
 
-        for (let col of this.state.columns)
-            heads.push(<tr><td>{col.Name}</td><td></td><td>{col.Type}</td></tr>);
+        const header = this.renderHeader();
+        const rows = this.renderRows();
 
         return (
-            <table className="highlight">
-                <thead>
-                    <tr>
-                        <th>Column</th>
-                        <th>Descrição</th>
-                        <th>Tipo</th>
-                    </tr>
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            {header}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {rows}
+                    </tbody>
+                </table> 
 
-                </thead>
-               
-                                <tbody>
-                    {heads}
-                </tbody>
-            
+            </div>
+        );
 
-            </table>);
     }
+
+
 }
 
+export default Result;
