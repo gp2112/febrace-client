@@ -129,6 +129,8 @@ class QueryForm extends Component {
         this.setState({viewCode: r});
     }
 
+    
+
     render() {
         
         let exp = {};
