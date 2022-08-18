@@ -18,10 +18,10 @@ class Result extends Component {
         super(props);
 
         this.state = {
-            data: props.data
+            data: props.data,
+            limit: 20
         };
 
-        this.limit = this.props.limit;
 
     }
 
@@ -39,7 +39,7 @@ class Result extends Component {
         const rows = []; let i=0;
 
         for (let row of this.state.data) {
-            if (i >= this.limit) break;
+            if (i >= this.state.limit) break;
 
             let fields = [];
             for (let col of this.columns)
@@ -54,6 +54,32 @@ class Result extends Component {
             );
         }
         return rows;
+    }
+
+
+    toCSV = () => {
+        let csvData = [this.columns];
+        let fields;
+        for (let row of this.state.data) {
+            fields = [];
+
+            for (let col of this.columns)
+                fields.push(row[col]);
+
+            csvData.push(fields.join(','));
+        }
+        csvData = csvData.join('\n');
+
+        const downloadLink = document.createElement('a');
+        const blob = new Blob(['\ufeff', csvData]);
+        const url = URL.createObjectURL(blob);
+        downloadLink.href = url;
+        downloadLink.download = "data.csv";
+
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+
     }
 
     render() {
@@ -75,7 +101,18 @@ class Result extends Component {
                         {rows}
                     </tbody>
                 </table> 
-
+                
+                <p>Vizualizando {rows.length} de {this.state.data.length}</p>
+                
+                <div className="row">
+                    <div className="col">
+                        <button className="btn red" onClick={this.toggleResult}>Voltar</button>
+                    </div>
+                    <div className="col">
+                        <button className="btn green" onClick={this.toCSV}>Download</button>
+                    </div>
+                </div>
+                
             </div>
         );
 

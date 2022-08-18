@@ -34,7 +34,8 @@ class QueryForm extends Component {
             loading: true,
             viewCode: false,
             result: null,
-            showResult: false
+            showResult: false,
+            limit: 100
         };
         this.canAddColumn = true;
 
@@ -135,7 +136,7 @@ class QueryForm extends Component {
     search = async () => {
         this.setState({loading: true});
         const resp = await tableRequest(this.state.tableName, 
-                            this.state.selectedColumns, this.toExpr(), 10);
+                            this.state.selectedColumns, this.toExpr(), this.state.limit);
 
         console.log(resp);
 
@@ -150,20 +151,17 @@ class QueryForm extends Component {
         this.setState({showResult: nr})
     }
 
+    changeLimit = (e) => {
+        this.setState({limit: parseInt(e.target.value)})
+    }
+
     render() {
         
         if (this.state.showResult)
             return (
                <div className="results"> 
                     <Result data={this.state.result} />
-                    <div className="row">
-                        <div className="col">
-                            <button className="btn red" onClick={this.toggleResult}>Voltar</button>
-                        </div>
-                        <div className="col">
-                            <button className="btn green">Download</button>
-                        </div>
-                    </div>
+                    
                 </div>
             )
 
@@ -175,6 +173,7 @@ class QueryForm extends Component {
             console.log(e);
         }
 
+        const resultEmpty = !this.state.result || this.state.result.length == 0;
                 
         return (
 
@@ -195,6 +194,7 @@ class QueryForm extends Component {
                     </> :
                     <img className="loading-gif" width="75" src={require("../static/img/loading.gif")}/>
                 } 
+            
                 
 
                 {this.state.viewCode ? 
@@ -207,14 +207,17 @@ class QueryForm extends Component {
                         
                     </div> : <p></p>
                 }
-                <div className="row">
-                    <div className="col s12">
-                        <div className="col s6 right-align">
+                <div className="row"> 
+                    <div className="col s3">
+                        <input type="number" value={this.state.limit} min="1" max="10000" placeholder="limit" onChange={this.changeLimit} />
+                    </div>
+                    <div className="col s9 right-align">
+                        <div className="col s3">
                             <button className="btn orange" onClick={this.toggleView}>
                                 Ver Código
                             </button>
                         </div>
-                        <div className="col s6 left-align">
+                        <div className="col s2 ">
                             <button className="btn green" onClick={this.search}>
                                 Buscar
                             </button>
