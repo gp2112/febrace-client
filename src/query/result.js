@@ -18,8 +18,7 @@ class Result extends Component {
         super(props);
 
         this.state = {
-            columns: props.columns,
-            rows: props.rows
+            data: props.data
         };
 
         this.limit = this.props.limit;
@@ -28,7 +27,7 @@ class Result extends Component {
 
     renderHeader() {
         const header = [];
-        for (let col of this.state.columns) {
+        for (let col of this.columns) {
             header.push(
                 <th key={col}>{col}</th>
             );
@@ -39,13 +38,13 @@ class Result extends Component {
     renderRows() {
         const rows = []; let i=0;
 
-        for (let row of this.state.rows) {
+        for (let row of this.state.data) {
             if (i >= this.limit) break;
 
             let fields = [];
-            for (let col of this.state.columns)
+            for (let col of this.columns)
                 fields.push(
-                    <td key={col}>row[col]</td>
+                    <td key={col}>{row[col]}</td>
                 );
 
             rows.push(
@@ -58,6 +57,8 @@ class Result extends Component {
     }
 
     render() {
+
+        this.columns = Object.keys(this.state.data[0]);
 
         const header = this.renderHeader();
         const rows = this.renderRows();

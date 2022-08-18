@@ -6,6 +6,7 @@ import Filter from "./filter.js";
 import 'materialize-css/dist/css/materialize.min.css';
 import './query.css';
 import '../App.css';
+import Result from "./result.js";
 
 import M from "materialize-css";
 
@@ -31,7 +32,9 @@ class QueryForm extends Component {
             selectedColumns: [],
             filter: {},
             loading: true,
-            viewCode: false
+            viewCode: false,
+            result: null,
+            showResult: false
         };
         this.canAddColumn = true;
 
@@ -129,10 +132,41 @@ class QueryForm extends Component {
         this.setState({viewCode: r});
     }
 
-    
+    search = async () => {
+        this.setState({loading: true});
+        const resp = await tableRequest(this.state.tableName, 
+                            this.state.selectedColumns, this.toExpr(), 10);
+
+        console.log(resp);
+
+        const showR = resp && resp.length > 0;
+
+        this.setState({loading: false, result: resp, showResult: showR});
+
+    }
+
+    toggleResult = () => {
+        const nr = !this.state.showResult;
+        this.setState({showResult: nr})
+    }
 
     render() {
         
+        if (this.state.showResult)
+            return (
+               <div className="results"> 
+                    <Result data={this.state.result} />
+                    <div className="row">
+                        <div className="col">
+                            <button className="btn red" onClick={this.toggleResult}>Voltar</button>
+                        </div>
+                        <div className="col">
+                            <button className="btn green">Download</button>
+                        </div>
+                    </div>
+                </div>
+            )
+
         let exp = {};
 
         try { 
@@ -164,8 +198,8 @@ class QueryForm extends Component {
                 
 
                 {this.state.viewCode ? 
-                    <div id="queryCode">
-                        <pre className="language-json">
+                    <div id="queryCode" className="code-box">
+                        <pre>
                         <code>
                         {JSON.stringify(exp, null, 4)}
                         </code>
@@ -181,7 +215,7 @@ class QueryForm extends Component {
                             </button>
                         </div>
                         <div className="col s6 left-align">
-                            <button className="btn green">
+                            <button className="btn green" onClick={this.search}>
                                 Buscar
                             </button>
                         </div>

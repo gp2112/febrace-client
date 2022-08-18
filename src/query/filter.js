@@ -43,7 +43,7 @@ class Select extends Component {
 
     setValue = (value) => {
         this.setState({value: value});
-        this.changeQuery(this.index, this.state.selectedColumn, value, this.state.operation);
+        this.changeQuery(this.index, this.state.selectedColumn, parseInt(value), this.state.operation);
     }
 
     removeq = () => {
@@ -203,7 +203,7 @@ class Filter extends Component {
             i++;
             console.log(q);
             if (!q) continue;
-            if (!q.value || !q.value.length)
+            if (!q.value)
                 canAddColumn = false;
 
             selects.push(

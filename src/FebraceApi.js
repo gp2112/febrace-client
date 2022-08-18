@@ -17,7 +17,7 @@ async function tableRequest(tableName, fields, filters, limit) {
     const r = await axios.get(
           URL+tableName, {
           params: { 
-              fields: fields,
+              fields: fields.join(','),
               filters: JSON.stringify(filters),
               limit: limit
           },
