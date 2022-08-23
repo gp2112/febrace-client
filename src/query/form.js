@@ -15,19 +15,19 @@ class QueryForm extends Component {
      componentDidMount() {
         M.AutoInit();
         M.FormSelect.init();
-        
+
         const chipElems = document.querySelector('.chips');
         this.selectsInstance = M.Chips.init(chipElems, {});
-       
+
     }
 
     constructor(props) {
         super(props);
-        
+
         this.selectsInstance = null;
 
         this.state = {
-            tableName: 'matriculas',
+            tableName: '',
             columns: [],
             selectedColumns: [],
             filter: {},
@@ -42,7 +42,7 @@ class QueryForm extends Component {
         this.loadColumns();
 
     }
-    
+
     __recurToExpr(query) {
         console.log('recur', query);
         if (query.type === "leaf") {
@@ -64,8 +64,8 @@ class QueryForm extends Component {
             c = children.or;
         }
         else throw new Error("Invalid expression!");
-       
-        
+
+
         for (let sub of q) {
             if (!sub) continue;
             c.push(this.__recurToExpr(sub));
@@ -76,9 +76,9 @@ class QueryForm extends Component {
 
     toExpr() {
 
-       return this.__recurToExpr(this.state.filter); 
+       return this.__recurToExpr(this.state.filter);
     }
-    
+
     loadColumnsOptions(columns) {
          let chipOptions = {
             placeholder: 'Escolha as colunas desejadas',
@@ -94,7 +94,7 @@ class QueryForm extends Component {
         for (let col of columns) {
             chipOptions.autocompleteOptions.data[col.Name] = null;
         }
-        
+
         const chipElems = document.querySelector('.chips');
         this.selectsInstance = M.Chips.init(chipElems, chipOptions);
 
@@ -119,7 +119,7 @@ class QueryForm extends Component {
     }
 
     updatefilter = (op, query) => {
-                    
+
         const f = {};
         f[op] = query;
         this.setState({filter: f});
@@ -135,7 +135,7 @@ class QueryForm extends Component {
 
     search = async () => {
         this.setState({loading: true});
-        const resp = await tableRequest(this.state.tableName, 
+        const resp = await tableRequest(this.state.tableName,
                             this.state.selectedColumns, this.toExpr(), this.state.limit);
 
         console.log(resp);
@@ -156,29 +156,26 @@ class QueryForm extends Component {
     }
 
     render() {
-        
+
         if (this.state.showResult)
             return (
-               <div className="results"> 
+               <div className="results">
                     <Result data={this.state.result} />
-                    
                 </div>
             )
 
         let exp = {};
 
-        try { 
+        try {
             exp = this.toExpr();
         } catch (e) {
             console.log(e);
         }
 
         const resultEmpty = !this.state.result || this.state.result.length == 0;
-                
         return (
 
             <div className="query-form">
-               
                 <input type="text" id="tablename" />
                 <label htmlFor="tablename">Tabela</label>
 
@@ -193,21 +190,18 @@ class QueryForm extends Component {
                     <Filter columns={this.state.columns} updateFilter={this.updatefilter} />
                     </> :
                     <img className="loading-gif" width="75" src={require("../static/img/loading.gif")}/>
-                } 
-            
-                
+                }
 
-                {this.state.viewCode ? 
+                {this.state.viewCode ?
                     <div id="queryCode" className="code-box">
                         <pre>
                         <code>
                         {JSON.stringify(exp, null, 4)}
                         </code>
                         </pre>
-                        
                     </div> : <p></p>
                 }
-                <div className="row"> 
+                <div className="row">
                     <div className="col s3">
                         <input type="number" value={this.state.limit} min="1" max="10000" placeholder="limit" onChange={this.changeLimit} />
                     </div>

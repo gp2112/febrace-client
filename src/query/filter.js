@@ -16,7 +16,7 @@ const mathExpressions = {
 const MAXGARBAGE = 25;
 
 class Select extends Component {
-    
+
     componentDidMount() {
         M.AutoInit();
         M.FormSelect.init();
@@ -35,7 +35,7 @@ class Select extends Component {
         this.index = props.index;
     }
 
-    
+
     selectColumn = (col) => {
         this.setState({selectedColumn: col});
         this.changeQuery(this.index, col, this.state.value, this.state.operation);
@@ -59,13 +59,13 @@ class Select extends Component {
     render() {
         let options = [];
         for (let col of this.state.columns) {
-           options.push(<option key={col.Name} value={col.Name} >{col.Name}</option>); 
+           options.push(<option key={col.Name} value={col.Name} >{col.Name}</option>);
         }
         console.log(this.state);
-        return  (   
+        return  (
             <div className="input-field col s12">
                 <div className="input-field col s3">
-                
+
                     <select className="" value={this.state.selectedColumn} onChange={e => this.selectColumn(e.target.value)}>
                         <option value="" disabled >Select a column.</option>
                         {options}
@@ -86,14 +86,14 @@ class Select extends Component {
                 </div>
             </div>
         );
-        
+
     }
 }
 
 
 
 class Filter extends Component {
-    
+
     componentDidMount() {
         M.AutoInit();
         M.FormSelect.init();
@@ -112,13 +112,13 @@ class Filter extends Component {
         this.updateFilter = props.updateFilter;
         this.canAddColumn = true;
     }
-    
-   
+
+
     toString() {
         let expr = '';
         for (let q in this.state.query) {
             if (q)
-                expr += ' ' + q.column + ' ' + 
+                expr += ' ' + q.column + ' ' +
                     mathExpressions[q.operation] + ' ' +
                     q.value + ' ';
         }
@@ -128,18 +128,18 @@ class Filter extends Component {
     garbageCollect() {
         if (this.removedCount < MAXGARBAGE)
             return;
-       
+
         console.log('COLLECTING GARBAGE!');
 
         let newQuery = [];
         let select;
         for (let q of this.state.query) {
             if (!q) continue;
-            
-            select = <Select index={newQuery.length} changeQuery={this.changeQuery} 
-                    removeQuery={this.removeQuery} columns={this.state.columns} 
+
+            select = <Select index={newQuery.length} changeQuery={this.changeQuery}
+                    removeQuery={this.removeQuery} columns={this.state.columns}
                     defaultColumn={q.column} defaultValue={q.value} />;
-            
+
             newQuery.push({
                 type: q.type,
                 value: q.value,
@@ -182,7 +182,7 @@ class Filter extends Component {
         let query = this.state.query;
         if (!this.canAddColumn) return ;
 
-        let select = <Select index={query.length} changeQuery={this.changeQuery} 
+        let select = <Select index={query.length} changeQuery={this.changeQuery}
                     removeQuery={this.removeQuery} columns={this.state.columns} defaultValue="" />;
 
         query.push({type:'leaf', column: '', operation: 'equals', value: '', select: select});
@@ -195,7 +195,7 @@ class Filter extends Component {
     }
 
     render() {
-        
+
         let canAddColumn = true;
         const selects = []; let i=0;
 
@@ -212,7 +212,7 @@ class Filter extends Component {
                 </div>
             );
         }
-       
+
 
         this.canAddColumn = canAddColumn;
 
@@ -231,7 +231,7 @@ class Filter extends Component {
                 </div>
                 <div className="right-align">
                     <button className="btn m2">Add SubQuery</button>
-                    <button className={!this.canAddColumn ? "btn grey lighten-1" : "btn"} 
+                    <button className={!this.canAddColumn ? "btn grey lighten-1" : "btn"}
                         onClick={e => this.addSelect(e)}>Add Column
                     </button>
                 </div>

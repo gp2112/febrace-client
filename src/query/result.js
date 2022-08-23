@@ -26,7 +26,7 @@ class Result extends Component {
     }
 
     renderHeader() {
-        const header = [];
+        const header = [<th>#</th>];
         for (let col of this.columns) {
             header.push(
                 <th key={col}>{col}</th>
@@ -41,7 +41,7 @@ class Result extends Component {
         for (let row of this.state.data) {
             if (i >= this.state.limit) break;
 
-            let fields = [];
+            let fields = [<td key="index">{i+1}</td>];
             for (let col of this.columns)
                 fields.push(
                     <td key={col}>{row[col]}</td>
@@ -91,7 +91,7 @@ class Result extends Component {
 
         return (
             <div>
-                <table>
+                <table className="highlight centered responsive-table" id="result">
                     <thead>
                         <tr>
                             {header}
@@ -100,10 +100,8 @@ class Result extends Component {
                     <tbody>
                         {rows}
                     </tbody>
-                </table> 
-                
+                </table>
                 <p>Vizualizando {rows.length} de {this.state.data.length}</p>
-                
                 <div className="row">
                     <div className="col">
                         <button className="btn red" onClick={this.toggleResult}>Voltar</button>
@@ -112,7 +110,6 @@ class Result extends Component {
                         <button className="btn green" onClick={this.toCSV}>Download</button>
                     </div>
                 </div>
-                
             </div>
         );
 

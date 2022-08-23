@@ -9,7 +9,7 @@ button {
     margin-left: 1%;
 }
 
-.operation-select { 
+.operation-select {
     width: 60%;
     margin-left: 20%;
 }
@@ -21,4 +21,24 @@ button {
     border: solid #a0a0a0 0.2em;
     border-radius: 0.6em;
     background-color: #e7eaed;
+}
+
+
+#result tbody {
+  display: block;
+  height: 30em;
+  overflow: auto;
+}
+#result thead, #result tbody tr {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+#result thead {
+  width: calc( 100% - 1em )
+}
+#result {
+  width: 80%;
+  margin-left: 10%;
 }
