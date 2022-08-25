@@ -42,3 +42,9 @@ button {
   width: 80%;
   margin-left: 10%;
 }
+
+#form-loader {
+    position: absolute;
+    left: 40%;
+    top: 20em;
+};

@@ -10,6 +10,8 @@ import Result from "./result.js";
 
 import M from "materialize-css";
 
+import {Loader} from "../util/loader.js";
+
 
 class QueryForm extends Component {
      componentDidMount() {
@@ -27,7 +29,7 @@ class QueryForm extends Component {
         this.selectsInstance = null;
 
         this.state = {
-            tableName: '',
+            tableName: props.tablename,
             columns: [],
             selectedColumns: [],
             filter: {},
@@ -155,15 +157,14 @@ class QueryForm extends Component {
         this.setState({limit: parseInt(e.target.value)})
     }
 
-    render() {
 
+    render() {
         if (this.state.showResult)
             return (
                <div className="results">
                     <Result data={this.state.result} />
                 </div>
             )
-
         let exp = {};
 
         try {
@@ -173,12 +174,10 @@ class QueryForm extends Component {
         }
 
         const resultEmpty = !this.state.result || this.state.result.length == 0;
+
         return (
 
             <div className="query-form">
-                <input type="text" id="tablename" />
-                <label htmlFor="tablename">Tabela</label>
-
 
                 <div id="colsSelect" className="chips chips-autocomplete chips-placeholder">
                 </div>
@@ -189,7 +188,7 @@ class QueryForm extends Component {
                     <>
                     <Filter columns={this.state.columns} updateFilter={this.updatefilter} />
                     </> :
-                    <img className="loading-gif" width="75" src={require("../static/img/loading.gif")}/>
+                    <div id="form-loader">{Loader}</div>
                 }
 
                 {this.state.viewCode ?

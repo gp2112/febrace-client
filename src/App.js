@@ -76,14 +76,49 @@ class App extends Component {
         M.AutoInit();
     }
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            tablename: '',
+            allowSearch: false
+        };
+    }
+
+    checkEmpty = (e) => {
+        const target = e.target;
+        this.setState({allowSearch: target.value.length>0});
+    };
+
+    changeTableName = () => {
+        const t = document.getElementById('tablename');
+
+        this.setState({tablename: t.value});
+    };
+
     render() {
+
+        const tableInput = (
+            <div className="row query-form table-query">
+                <div className="col s10">
+                    <input id="tablename" type="text" onChange={this.checkEmpty} placeholder="Tabela a ser buscada" />
+                </div>
+                <div className="col s2">
+                    <button className={ this.state.allowSearch ? "btn" : "btn grey"} onClick={this.changeTableName} disabled={!this.state.allowSearch} >
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        );
+
         return (
             <>
                 <header>
                     <NavBar />
                 </header>
                 <main>
-                    <QueryForm />
+                    {!this.state.tablename.length ?
+                        tableInput : <QueryForm tablename={this.state.tablename}/>
+                    }
                 </main>
             </>
         );
