@@ -1,5 +1,5 @@
 {
-  "name": "febrace",
+  "name": "febrace-client",
   "version": "0.1.0",
   "private": true,
   "bin": "app.js",

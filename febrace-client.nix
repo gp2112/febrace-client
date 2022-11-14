@@ -10,19 +10,35 @@ mkYarnPackage rec {
 
   src = ./.;
 
-  yarnPreBuild = ''
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
-  '';
+  packageJSON = ./package.json;
+  yarnLock = ./yarn.lock;
+  yarnNix = ./yarn.nix;
+
+  doDist = false;
 
   buildPhase = ''
-    yarn build --offline
+    runHook preBuild
+    shopt -s dotglob
+
+    rm deps/${name}/node_modules
+    mkdir deps/${name}/node_modules
+
+    pushd deps/${name}/node_modules
+      ln -s ../../../node_modules/* ./
+    popd
+
+    cd deps/${name}
+    yarn --offline build
+    cd ../../
+    runHook postBuild
   '';
 
-  distPhase = "true";
+  installPhase = ''
+    runHook preInstall
+    mv deps/${name}/build $out
+    runHook postInstall
+  '';
 
-  configurePhase = "ln -s $node_modules node_modules";
+
 
 }
