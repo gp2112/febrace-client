@@ -7,7 +7,7 @@
     let
       inherit (nixpkgs) lib;
       pkgsFor = nixpkgs.legacyPackages;
-      name = "febraceclient";
+      name = "febrace-client";
       genSystems = lib.genAttrs [
         "aarch64-linux"
         "x86_64-linux"

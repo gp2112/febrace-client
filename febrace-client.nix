@@ -20,7 +20,7 @@ mkYarnPackage rec {
     runHook preBuild
     shopt -s dotglob
 
-    rm deps/${name}/node_modules
+    rm -f deps/${name}/node_modules
     mkdir deps/${name}/node_modules
 
     pushd deps/${name}/node_modules
@@ -39,6 +39,8 @@ mkYarnPackage rec {
     runHook postInstall
   '';
 
-
+  distPhase = ''
+  
+  '';
 
 }
