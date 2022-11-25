@@ -1,7 +1,7 @@
 
 const axios = require('axios');
 
-const URL = 'http://127.0.0.1:5000/'
+const URL = 'https://api.febrace.guip.dev/'
 
 
 
